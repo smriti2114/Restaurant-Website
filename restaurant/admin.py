@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import Menu
-from .models import Booking
+from . import models
 
-
-
-admin.site.register(Menu)
-
-
+admin.site.register(models.MenuItem)
+admin.site.register(models.Category)
+admin.site.register(models.yourCart)
+admin.site.register(models.Orderlist)
+admin.site.register(models.OrderMenuitem)
+admin.site.register(models.Booking)
