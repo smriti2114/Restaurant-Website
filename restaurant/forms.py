@@ -10,7 +10,7 @@ class DateInput(forms.DateInput):
     def get_context(self, name, value, attrs):
         attrs.setdefault('min', now().strftime('%Y-%m-%d'))
         return super().get_context(name, value, attrs)
-    
+
 
 # Code added for loading form data on the Booking page
 class BookingForm(ModelForm):

@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 class DateConverter:
     regex = '\d{4}-\d{1,2}-\d{1,2}'
     format = '%Y-%m-%d'
