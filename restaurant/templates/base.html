@@ -2,49 +2,58 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Little Lemon</title>
-    <meta name="description" content="A brief description" />
-    <meta
-      name="author"
-      content="Based in Chicago, Illinois, Little Lemon is a family owned Mediterranean restaurant, focused on traditional recipes served with a modern twist."
-    />
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Load favicon -->
-    <link
-      rel="shortcut icon"
-      type="image/png"
-      href="{% static 'img/favicon.ico' %}"
-    />
+  <!--Bootstrap CSS-->
 
-    <!-- Include your CSS files here -->
-    <link
-      rel="preload"
-      as="style"
-      href="{% static 'css/style.css' %}"
-      onload="this.rel = 'stylesheet'"
-    />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Karla&family=Markazi+Text:wght@500&display=swap"
-      rel="stylesheet"
-    />
-  </head>
 
-  <body>
-    <!--Header content-->
-    {% include 'partials/_header.html' %}
+  <title>Little Lemon</title>
+  <meta name="description" content="A brief description" />
+  <meta name="author"
+    content="Based in Chicago, Illinois, Little Lemon is a family owned Mediterranean restaurant, focused on traditional recipes served with a modern twist." />
 
-    <main>{% block content %} {% endblock %}</main>
+  <!-- Load favicon -->
+  <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}" />
 
-    <!--Footer content-->
+  <!-- Include your CSS files here -->
+  <link rel="preload" as="style" href="{% static 'css/style.css' %}" onload="this.rel = 'stylesheet'" />
 
-    {% include 'partials/_footer.html' %}
-    <!-- Replace this comment with your code  -->
-  </body>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Karla&family=Markazi+Text:wght@500&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body>
+  <!--Header content-->
+  {% include 'partials/_header.html' %}
+
+
+  <main>{% block content %} {% endblock %}</main>
+
+  <!--Footer content-->
+
+  {% include 'partials/_footer.html' %}
+
+  <!-- Optional Javascript -->
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"
+    integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
+    crossorigin="anonymous"></script>
+  -->
+
+</body>
+
 </html>

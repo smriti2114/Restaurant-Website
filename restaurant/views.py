@@ -18,7 +18,7 @@ from django.contrib import messages
 
 def activateEmail(request, user):
     messages.success(request,
-                     f'Dear <b>{user}</b>, your reservation has been booked successfully.')
+                     f'Dear {user}, your reservation has been booked successfully.')
 
 
 def home(request):
@@ -34,24 +34,28 @@ def book(request):
     if request.method == 'POST':
         form = BookingForm(request.POST)
         if form.is_valid():
-            form.save()
-            activateEmail(
-                request, form.cleaned_data['first_name'] + " " + form.cleaned_data['last_name'])
+            data = list(Booking.objects.filter(
+                date=form.cleaned_data['date'], timeslot=form.cleaned_data['timeslot']))
+            if data:
+                messages.error(
+                    request, "An existing timeslot clashes with the given one!")
+            else:
+                form.save()
+                activateEmail(
+                    request, form.cleaned_data['first_name'] + " " + form.cleaned_data['last_name'])
+
     context = {'form': form}
     return render(request, 'book.html', context)
 
 
 def bookinglist(request, mydate):
-    print("inside bookinglist API", request, mydate)
     o = list(Booking.objects.values())
     for i in o:
         print("date is ", i['date'])
     data = list(Booking.objects.filter(date=mydate[7:]).values())
-    print("data is ", data)
     for d in data:
         d['timeslot'] = Booking.TIMESLOT_LIST[d['timeslot']][1]
     x = JsonResponse({'text': data})
-    print("x is ", x)
     return x
 
 
@@ -60,7 +64,6 @@ def reservations(request):
 
 
 def reservationlist(request):
-    print("inside list API")
     data = list(Booking.objects.values())
     for d in data:
         d['timeslot'] = Booking.TIMESLOT_LIST[d['timeslot']][1]

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -60,7 +61,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         # The settings for templates updated for the Graded assessment
-        'DIRS': ['restaurant/templates' ],
+        'DIRS': ['restaurant/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,13 +83,13 @@ WSGI_APPLICATION = 'littlelemon.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-		'NAME': 'smritilittlelemon',
-		'HOST': 'localhost',
-		'PORT': '3306',
-		'USER': 'root',
-		'PASSWORD': 'Qaws12R',
+        'NAME': 'smritilittlelemon',
+                'HOST': 'localhost',
+                'PORT': '3306',
+                'USER': 'root',
+                'PASSWORD': 'Qaws12R',
     }
-    
+
 }
 
 # The settings for media files have been updated for the Graded assessment
@@ -139,7 +140,7 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
-        #'rest_framework_xml.renderers.XMLRenderer',
+        # 'rest_framework_xml.renderers.XMLRenderer',
     ],
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
@@ -153,7 +154,7 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.AnonRateThrottle',
         'rest_framework.throttling.UserRateThrottle',
     ],
-    'DEFAULT_AUTHENTICATION_CLASSES':[
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
         "rest_framework.authentication.SessionAuthentication",
     ],
@@ -169,7 +170,7 @@ REST_FRAMEWORK = {
 
 
 DJOSER = {
-    'USER_ID_FIELD' : 'username'
+    'USER_ID_FIELD': 'username'
 }
 
 
@@ -177,3 +178,12 @@ DJOSER = {
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-secondary',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}

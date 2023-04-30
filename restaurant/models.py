@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import User
+from django.contrib import messages
 
 
 class Booking(models.Model):
@@ -49,9 +50,7 @@ class Booking(models.Model):
             # Exclude this object if it is already saved to the database
             queryset = queryset.exclude(pk=self.pk)
         if queryset.exists():
-            print("Error was raised")
-            raise ValidationError(
-                'An existing timeslot clashes with the given one!')
+            return False
 
 
 class Category(models.Model):

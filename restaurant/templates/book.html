@@ -5,6 +5,7 @@
 <section>
   <article>
     <h1>Make a reservation</h1>
+    {% include 'messages.html' %}
     <!--Begin row-->
     <div class="row">
       <!--Begin col-->
@@ -17,21 +18,21 @@
           <script>
             const dateElement = document.getElementById("id_date")
             dateElement.addEventListener("change", myEvent)
-          
+
             function myEvent() {
               const dateElement = document.getElementById("id_date")
               const div2 = document.getElementById('div2')
               div2.innerHTML = 'new data'
               d = dateElement.value
               console.log("date is ", d)
-              fetch('http://127.0.0.1:8000/bookinglist/mydate='+d)
-              .then(response=>response.json())
-              .then(data=>{
-                const para = document.createElement("pre");
-                const node = document.createTextNode(JSON.stringify(data, null, 2));
-                para.appendChild(node);
-                div2.replaceChildren(para);
-              })
+              fetch('http://127.0.0.1:8000/bookinglist/mydate=' + d)
+                .then(response => response.json())
+                .then(data => {
+                  const para = document.createElement("pre");
+                  const node = document.createTextNode(JSON.stringify(data, null, 2));
+                  para.appendChild(node);
+                  div2.replaceChildren(para);
+                })
             }
           </script>
         </form>
