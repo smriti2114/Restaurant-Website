@@ -38,11 +38,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     # The settings for app updated for the Graded assessment
     'restaurant',
     'rest_framework',
     'djoser',
     'rest_framework.authtoken',
+
+    # For user sign up flow
+    'crispy_forms',
+    'crispy_bootstrap4',
 ]
 
 MIDDLEWARE = [
@@ -179,7 +184,8 @@ DJOSER = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+# For bootstrap mapping to display Django messages in colorful ways
+# like Green for success and Red for error etc.
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-secondary',
     messages.INFO: 'alert-info',
@@ -188,12 +194,16 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
+# For sending confirmation emails
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_FROM = 'smritisharmatemp@gmail.com'
 EMAIL_HOST_USER = 'smritisharmatemp@gmail.com'
-EMAIL_HOST_PASSWORD = '<<<ADD Your Password>>>'
+EMAIL_HOST_PASSWORD = '<your password>'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 PASSWORD_RESET_TIMEOUT = 14400
+
+# For user sign-up flow
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

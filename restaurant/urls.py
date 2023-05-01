@@ -2,7 +2,7 @@ from django.urls import path, register_converter, include
 from . import views, converters
 from django.conf import settings
 from django.conf.urls.static import static
-
+from django.contrib.auth import views as auth
 
 register_converter(converters.DateConverter, 'date')
 
@@ -27,4 +27,9 @@ urlpatterns = [
     path('cart/menu-items', views.CartViewOperations.as_view()),
     path('orders', views.OrderViewOperations.as_view()),
     path('orders/<int:pk>', views.ViewSingleOrder.as_view()),
+    path('login/', views.restaurant_login, name='login'),
+    path('logout/',
+         auth.LogoutView.as_view(
+             template_name='index.html'), name='logout'),
+    path('register/', views.register, name='register')
 ]

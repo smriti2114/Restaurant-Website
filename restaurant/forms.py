@@ -2,6 +2,8 @@ from django.forms import ModelForm
 from .models import Booking
 from django import forms
 from django.utils.timezone import now
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 
 class DateInput(forms.DateInput):
@@ -20,3 +22,14 @@ class BookingForm(ModelForm):
         widgets = {
             'date': DateInput(),
         }
+
+
+# class for user sign up
+class UserRegisterForm(UserCreationForm):
+    email = forms.EmailField()
+    first_name = forms.CharField(max_length=20)
+    last_name = forms.CharField(max_length=20)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']

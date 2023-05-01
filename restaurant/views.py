@@ -1,7 +1,8 @@
-from django.shortcuts import render, get_object_or_404
-from .forms import BookingForm
+from django.shortcuts import render, get_object_or_404, redirect
+from .forms import BookingForm, UserRegisterForm
 from .models import *
 import json
+from django.contrib.auth.forms import AuthenticationForm
 from django.http import JsonResponse
 from rest_framework import generics
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, JsonResponse
@@ -19,18 +20,86 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
+from django.template.loader import get_template
+from django.template import Context
+from django.contrib.auth import authenticate, login
 
 
-def activateEmail(request, user, email, date, timeslot):
-    mail_subject = "Your reservation has been booked"
-    mail_body = f"You are booked for date {date} and slot {timeslot} PM, we'll be waiting for you."
+def sendEmail(request,
+              user=None,
+              email=None,
+              date=None,
+              timeslot=None,
+              subject=None,
+              body=None,
+              display=None):
+    if subject:
+        mail_subject = subject
+    else:
+        mail_subject = "Your reservation has been booked"
+    if body:
+        mail_body = body
+    else:
+        mail_body = f"You are booked for date {date} and slot {timeslot} PM, we'll be waiting for you."
     email = EmailMessage(mail_subject, mail_body, to=[email])
+
     if email.send():
         print("......... Sending email")
-        messages.success(request,
-                         f'Dear {user}, your reservation has been booked successfully.')
+        if display:
+            messages.success(request, display)
+        else:
+            messages.success(request,
+                             f'Dear {user}, your reservation has been booked successfully.')
     else:
-        messages.error("Failed to send a confirmation email to " + email)
+        messages.error("Failed to send an email to " + email)
+
+
+########### register here #####################################
+def register(request):
+    print("register was called")
+    if request.method == 'POST':
+        print("it's a registeration post request")
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
+            ######################### mail system ####################################
+            htmly = get_template('email.html')
+            d = {'username': username}
+            subject = 'welcome'
+            html_content = htmly.render(d)
+            msg = sendEmail(request,
+                            subject=subject, body=html_content, email=email,
+                            display=f'Your account has been created ! You are now able to log in')
+            ##################################################################
+            return redirect('login')
+        else:
+            print("Form is not valid ", form.error_messages, form.errors)
+    else:
+        print("it's a register get request")
+        form = UserRegisterForm()
+    return render(request, 'register.html', {'form': form, 'title': 'register here'})
+
+################ login forms###################################################
+
+
+def restaurant_login(request):
+    if request.method == 'POST':
+
+        # AuthenticationForm_can_also_be_used__
+
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            form = login(request, user)
+            messages.success(request, f' welcome {username} !!')
+            return redirect('home')
+        else:
+            messages.info(request, f'account done not exit plz sign in')
+    form = AuthenticationForm()
+    return render(request, 'login.html', {'form': form, 'title': 'log in'})
 
 
 def home(request):
@@ -53,7 +122,7 @@ def book(request):
                     request, "An existing timeslot clashes with the given one!")
             else:
                 form.save()
-                activateEmail(
+                sendEmail(
                     request, form.cleaned_data['first_name'] +
                     " " + form.cleaned_data['last_name'],
                     form.cleaned_data['email'],
