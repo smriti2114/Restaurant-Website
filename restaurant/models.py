@@ -28,6 +28,8 @@ class Booking(models.Model):
             raise ValidationError("The date cannot be in the past")
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
+    email = models.EmailField(
+        max_length=254, default="smritisharmatemp@gmail.com")
     guest_number = models.IntegerField()
     comment = models.CharField(max_length=1000)
     date = models.DateField()

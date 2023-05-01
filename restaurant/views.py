@@ -14,11 +14,23 @@ from .permissions import IsManager, IsDeliveryStaff
 import math
 from datetime import date
 from django.contrib import messages
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.core.mail import EmailMessage
 
 
-def activateEmail(request, user):
-    messages.success(request,
-                     f'Dear {user}, your reservation has been booked successfully.')
+def activateEmail(request, user, email, date, timeslot):
+    mail_subject = "Your reservation has been booked"
+    mail_body = f"You are booked for date {date} and slot {timeslot} PM, we'll be waiting for you."
+    email = EmailMessage(mail_subject, mail_body, to=[email])
+    if email.send():
+        print("......... Sending email")
+        messages.success(request,
+                         f'Dear {user}, your reservation has been booked successfully.')
+    else:
+        messages.error("Failed to send a confirmation email to " + email)
 
 
 def home(request):
@@ -42,7 +54,11 @@ def book(request):
             else:
                 form.save()
                 activateEmail(
-                    request, form.cleaned_data['first_name'] + " " + form.cleaned_data['last_name'])
+                    request, form.cleaned_data['first_name'] +
+                    " " + form.cleaned_data['last_name'],
+                    form.cleaned_data['email'],
+                    form.cleaned_data['date'],
+                    Booking.TIMESLOT_LIST[form.cleaned_data['timeslot'][1]])
 
     context = {'form': form}
     return render(request, 'book.html', context)
