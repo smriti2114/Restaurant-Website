@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import MenuItem, yourCart, Category, Orderlist, OrderMenuitem
+from .models import MenuItem, yourCart, Category, Orderlist, OrderMenuitem, Booking
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
@@ -65,6 +65,14 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta():
         model = Orderlist
         fields = ['id', 'user', 'total', 'status', 'delivery_staff', 'date']
+
+
+class BookingSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta():
+        model = Booking
+        fields = ['id', 'user', 'guest_number', 'comment', 'date', 'timeslot']
 
 
 class SingleHelperSerializer(serializers.ModelSerializer):

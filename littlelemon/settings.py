@@ -58,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'crum.CurrentRequestUserMiddleware',
 ]
 
 ROOT_URLCONF = 'littlelemon.urls'
@@ -199,7 +200,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_FROM = 'smritisharmatemp@gmail.com'
 EMAIL_HOST_USER = 'smritisharmatemp@gmail.com'
-EMAIL_HOST_PASSWORD = '<your password>'
+EMAIL_HOST_PASSWORD = 'pyjjiwaqteofulhr'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 

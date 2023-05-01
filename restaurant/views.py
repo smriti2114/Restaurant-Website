@@ -23,6 +23,7 @@ from django.core.mail import EmailMessage
 from django.template.loader import get_template
 from django.template import Context
 from django.contrib.auth import authenticate, login
+from crum import get_current_user
 
 
 def sendEmail(request,
@@ -111,9 +112,13 @@ def about(request):
 
 
 def book(request):
+    print("inside booking ", request.user.is_authenticated, request.user.username)
+
     form = BookingForm()
     if request.method == 'POST':
         form = BookingForm(request.POST)
+        # import pdb
+        # pdb.set_trace()
         if form.is_valid():
             data = list(Booking.objects.filter(
                 date=form.cleaned_data['date'], timeslot=form.cleaned_data['timeslot']))
@@ -122,25 +127,34 @@ def book(request):
                     request, "An existing timeslot clashes with the given one!")
             else:
                 form.save()
+                user = get_current_user()
                 sendEmail(
-                    request, form.cleaned_data['first_name'] +
-                    " " + form.cleaned_data['last_name'],
-                    form.cleaned_data['email'],
+                    request, user.first_name +
+                    " " + user.last_name,
+                    user.email,
                     form.cleaned_data['date'],
-                    Booking.TIMESLOT_LIST[form.cleaned_data['timeslot'][1]])
+                    Booking.TIMESLOT_LIST[form.cleaned_data['timeslot']][1])
+        else:
+            print("form is not valid ", form.errors)
 
     context = {'form': form}
     return render(request, 'book.html', context)
 
 
 def bookinglist(request, mydate):
-    o = list(Booking.objects.values())
-    for i in o:
-        print("date is ", i['date'])
-    data = list(Booking.objects.filter(date=mydate[7:]).values())
+    user = get_current_user()
+    data = list(Booking.objects.filter(user__pk=user.pk, date=mydate[7:]))
+    import pdb
+    # pdb.set_trace()
+    l = []
     for d in data:
-        d['timeslot'] = Booking.TIMESLOT_LIST[d['timeslot']][1]
-    x = JsonResponse({'text': data})
+        l.append({
+            'name': d.user.first_name + " " + d.user.last_name,
+            'username': d.user.username,
+            'date': d.date,
+            'd.timeslot': Booking.TIMESLOT_LIST[d.timeslot][1]
+        })
+    x = JsonResponse({'text': l})
     return x
 
 
@@ -149,10 +163,21 @@ def reservations(request):
 
 
 def reservationlist(request):
-    data = list(Booking.objects.values())
+    user = get_current_user()
+    print("user pk is ", user.pk)
+    data = list(Booking.objects.filter(user__pk=user.pk))
+    import pdb
+    # pdb.set_trace()
+    l = []
     for d in data:
-        d['timeslot'] = Booking.TIMESLOT_LIST[d['timeslot']][1]
-    x = JsonResponse({'text': data})
+        l.append({
+            'name': d.user.first_name + " " + d.user.last_name,
+            'username': d.user.username,
+            'date': d.date,
+            'd.timeslot': Booking.TIMESLOT_LIST[d.timeslot][1]
+        })
+
+    x = JsonResponse({'text': l})
     print("x is ", x)
     return x
 

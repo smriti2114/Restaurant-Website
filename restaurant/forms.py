@@ -18,7 +18,12 @@ class DateInput(forms.DateInput):
 class BookingForm(ModelForm):
     class Meta:
         model = Booking
-        fields = "__all__"
+        fields = {
+            "guest_number",
+            "comment",
+            "date",
+            "timeslot",
+        }
         widgets = {
             'date': DateInput(),
         }
@@ -32,4 +37,5 @@ class UserRegisterForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['username', 'email', 'password1',
+                  'password2', 'first_name', 'last_name']

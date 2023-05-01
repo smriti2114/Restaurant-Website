@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib import messages
+from crum import get_current_user
 
 
 class Booking(models.Model):
@@ -26,10 +27,7 @@ class Booking(models.Model):
     def date_validation(value):
         if value < datetime.date.today():
             raise ValidationError("The date cannot be in the past")
-    first_name = models.CharField(max_length=200)
-    last_name = models.CharField(max_length=200)
-    email = models.EmailField(
-        max_length=254, default="smritisharmatemp@gmail.com")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     guest_number = models.IntegerField()
     comment = models.CharField(max_length=1000)
     date = models.DateField()
@@ -37,7 +35,7 @@ class Booking(models.Model):
 
 
     def __str__(self):
-        return self.first_name + ' ' + self.last_name
+        return self.user.first_name + ' ' + self.user.last_name
 
     @property
     def time(self):
@@ -53,6 +51,16 @@ class Booking(models.Model):
             queryset = queryset.exclude(pk=self.pk)
         if queryset.exists():
             return False
+
+    def save(self, *args, **kwargs):
+        user = get_current_user()
+        if user and not user.pk:
+            user = None
+            print("pk is none that's why setting to none")
+        self.user = user
+        import pdb
+        # pdb.set_trace()
+        super(Booking, self).save(*args, **kwargs)
 
 
 class Category(models.Model):

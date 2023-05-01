@@ -42,8 +42,11 @@
       <li><a href="{% url 'home' %}">Home</a></li>
       <li><a href="{% url 'about' %}">About</a></li>
       <li><a href="{% url 'menu' %}">Menu</a></li>
+      {% if user.is_authenticated %}
       <li><a href="{% url 'book' %}">Book</a></li>
       <li><a href="{% url 'reservations' %}">Reservations</a></li>
+      {% endif %}
+
 
       <li></li>
       <li></li>
